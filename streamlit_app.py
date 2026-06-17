@@ -49,18 +49,23 @@ else:
 
     for genre, count in genre_counts.most_common():
         st.write(f"• {genre} ({count})")
+    top_genre = genre_counts.most_common(1)[0][0]
+
+    st.subheader("🏆 Dominantes Genre")
+    st.success(top_genre)
 
 st.subheader("🧬 Dein Music DNA Profil")
+
 if len(artists) == 0:
     st.info("Noch nicht genug Daten für eine Analyse.")
 else:
-    st.success("🧬 Music DNA erkannt")
-    
-    st.write("""
-    Persönlichkeit:
+    if top_genre == "hip hop":
+        dna = "🧬 The Visionary Rebel"
 
-    • Musikliebhaber
-    • Entdecker neuer Sounds
-    • Analytischer Hörer
-    • Hohe musikalische Neugier
-    """)
+    elif "rock" in top_genre:
+        dna = "🧬 The Fearless Explorer"
+
+    else:
+        dna = "🧬 The Music Nomad"
+
+    st.success(dna)
