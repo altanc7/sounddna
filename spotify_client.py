@@ -14,13 +14,33 @@ sp = spotipy.Spotify(
     )
 )
 
-user = sp.current_user()
+def get_top_artists():
+    results = sp.current_user_top_artists(limit=10)
 
-print("Hallo", user["display_name"])
+    artists = []
 
-results = sp.current_user_top_artists(limit=10)
+    for artist in results["items"]:
+        artists.append(artist["name"])
 
-print("\nDeine Top Artists:")
+    return artists
 
-for artist in results["items"]:
-    print("-", artist["name"])
+def get_top_tracks():
+    results = sp.current_user_top_tracks(limit=10)
+
+    return [
+        track["name"] + " - " + track["artists"][0]["name"]
+        for track in results["items"]
+    ]
+
+def get_user_profile():
+    return sp.current_user()
+
+def get_top_genres():
+    results = sp.current_user_top_artists(limit=20)
+
+    genres = []
+
+    for artist in results["items"]:
+        genres.extend(artist["genres"])
+
+    return genres

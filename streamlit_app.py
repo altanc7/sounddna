@@ -1,38 +1,66 @@
+from spotify_client import (
+    get_top_artists,
+    get_top_tracks,
+    get_user_profile,
+    get_top_genres
+)
 import streamlit as st
 
 st.title("🎵 SoundDNA")
 
-artists = st.text_area(
-    "Enter your favorite artists (one per line)"
-)
+artists = get_top_artists()
+tracks = get_top_tracks()
+profile = get_user_profile()
+genres = get_top_genres()
 
-if st.button("Analyze"):
+st.subheader("👤 Spotify Profil")
+st.write("Name:", profile["display_name"])
+st.write("Land:", profile["country"])
+st.write("Abo:", profile["product"].capitalize())
 
-    artist_list = [
-        artist.strip()
-        for artist in artists.split("\n")
-        if artist.strip()
-    ]
+st.subheader("🎧 Deine Top Artists")
 
-    st.subheader("Your Music DNA")
 
-    if any("kanye" in artist.lower() for artist in artist_list):
-        st.success("🧬 The Visionary Rebel")
+if len(artists) == 0:
+    st.warning("Noch keine Spotify-Hörhistorie vorhanden.")
+else:
+    for artist in artists:
+        st.write("•", artist)
 
-        st.write("""
-        Traits:
-        - Creative
-        - Ambitious
-        - Independent
-        - Reflective
-        """)
+st.subheader("🎵 Deine Top Tracks")
+if len(tracks) == 0:
 
-    else:
-        st.success("🧬 The Explorer")
+    st.warning("Noch keine Spotify-Hörhistorie vorhanden.")
 
-        st.write("""
-        Traits:
-        - Curious
-        - Open-minded
-        - Adventurous
-        """)
+else:
+
+    for track in tracks:
+
+        st.write("•", track)
+
+st.subheader("🎼 Top Genres")
+
+if len(genres) == 0:
+    st.warning("Keine Genre-Daten vorhanden.")
+else:
+    from collections import Counter
+
+    genre_counts = Counter(genres)
+
+    for genre, count in genre_counts.most_common():
+        st.write(f"• {genre} ({count})")
+
+st.subheader("🧬 Dein Music DNA Profil")
+if len(artists) == 0:
+    st.info("Noch nicht genug Daten für eine Analyse.")
+else:
+    st.success("🧬 Music DNA erkannt")
+    
+    st.write("""
+    Persönlichkeit:
+
+    • Musikliebhaber
+    • Entdecker neuer Sounds
+    • Analytischer Hörer
+    • Hohe musikalische Neugier
+    """)
